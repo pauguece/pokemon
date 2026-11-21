@@ -2,6 +2,7 @@ package guevara.paulina.Pokemon.controller;
 
 import guevara.paulina.Pokemon.model.Pokemon;
 import guevara.paulina.Pokemon.service.PokemonService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +28,12 @@ public class PokemonController {
     }
 
     @PostMapping
-    public ResponseEntity<Pokemon> crear(@RequestBody Pokemon pokemon) {
+    public ResponseEntity<Pokemon> crear(@Valid @RequestBody Pokemon pokemon) {
         return ResponseEntity.status(HttpStatus.CREATED).body(pokemonService.crear(pokemon));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pokemon> actualizarCompleto(@PathVariable Long id, @RequestBody Pokemon pokemon) {
+    public ResponseEntity<Pokemon> actualizarCompleto(@PathVariable Long id, @Valid @RequestBody Pokemon pokemon) {
         return ResponseEntity.ok(pokemonService.actualizarCompleto(id, pokemon));
     }
 

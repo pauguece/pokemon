@@ -1,5 +1,6 @@
 package guevara.paulina.Pokemon.service;
 
+import guevara.paulina.Pokemon.exception.ResourceNotFoundException;
 import guevara.paulina.Pokemon.model.Pokemon;
 import guevara.paulina.Pokemon.repository.PokemonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class PokemonService {
 
     // Obtener por ID
     public Pokemon obtenerPorId(Long id) {
+        if(!pokemonRepository.existsById(id)){
+            throw new ResourceNotFoundException("Pokemon no encontrado, ID: " + id);
+        }
         return pokemonRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Pokémon con id " + id + " no encontrado"));
@@ -35,6 +39,9 @@ public class PokemonService {
 
     // Actualizar completo (PUT): reemplaza todos los atributos
     public Pokemon actualizarCompleto(Long id, Pokemon datos) {
+        if(!pokemonRepository.existsById(id)){
+            throw new ResourceNotFoundException("No se puede actualizar, pokemon no encontrado, ID: " + id);
+        }
         Pokemon existente = obtenerPorId(id);
         existente.setNombre(datos.getNombre());
         existente.setTipo(datos.getTipo());
@@ -47,6 +54,9 @@ public class PokemonService {
     }
 
     public Pokemon actualizarParcial(Long id, Pokemon datos) {
+        if(!pokemonRepository.existsById(id)){
+            throw new ResourceNotFoundException("No se puede actualizar, pokemon no encontrado, ID: " + id);
+        }
         Pokemon existente = obtenerPorId(id);
         if (datos.getNombre() != null)      existente.setNombre(datos.getNombre());
         if (datos.getTipo() != null)        existente.setTipo(datos.getTipo());
@@ -60,6 +70,9 @@ public class PokemonService {
 
     // Eliminar
     public void eliminar(Long id) {
+        if(!pokemonRepository.existsById(id)){
+            throw new ResourceNotFoundException("No se puede eliminar, pokemon no encontrado, ID: " + id);
+        }
         Pokemon existente = obtenerPorId(id); // lanza 404 si no existe
         pokemonRepository.delete(existente);
     }
